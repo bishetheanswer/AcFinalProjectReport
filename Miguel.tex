@@ -11,14 +11,13 @@ In order to facilitate address prediction and translation, the architecture prov
 
 
 \subsubsection*{Instruction decode}
-Types of instructions able to be decoded by the CPU (including):
+Types of instructions able to be decoded by the CPU (including)\cite{cortexA72manual}:
 
 \begin{itemize}
 	\item {A32: 32-bit wide, aligned on 4-byte boundaries. Both A-profile and R-profile are supported (application and real-time applications respectively) It is the most supported ISA. 
 		} \cite{a32instr}
 	\item {T32: mixed 32 and 16-bit length instruction set, aiming at lost memory footprint and cost. 
-		
-		It's the only ISA supported by type M instructions (specific to microcontrollers)} \cite{t32instr}
+		It's the only ISA supported by type M instructions (specific to microcontrollers)\cite{t32instr}} 
 	\item {A64. Instructions semantics similar to A32 and T32, with 31 64-bit general purpose registers; independent from Program Counter and Stack Pointer, and hard-coded zero register.} \cite{a64instr}
 	
 	This unit performs register renaming to facilitate out-of-order execution; thus removing both WAW and WAR hazards.
@@ -26,10 +25,10 @@ Types of instructions able to be decoded by the CPU (including):
 
 
 \subsubsection*{Instruction dispatch}
-The dispatch unit controls when the instructions that are decoded are ready to be issued, and afterwards, when the the results are retired.
+The dispatch unit controls when the instructions that are decoded are ready to be issued, and afterwards, when the the results are retired. \cite{cortexA72manual}
 
 \subsection*{Functional units for execution and memory access}
-This set of functional units is composed by the units for operating with integers, floating point values, and memory accesses.
+This set of functional units is composed by the units for operating with integers, floating point values, and memory accesses. \cite{cortexA72manual}
 
 \subsubsection*{Integer execute}
 \begin{itemize}
@@ -51,16 +50,16 @@ Its size is either 12KB, 1MB, 2MB, or 4MB; with a 16-way associativity with opti
 This cache, as explained in the section 7.2 of \cite{cortexA72manual} has a \textit{dirty} bit per line of cache (That is, per 64 bits).
 
 \subsubsection*{Advanced SIMD and floating-point}
-It gives support to ARMv8 advanced SIMD (Simple Input, multiple data) and floating-point operations. Optionally, it is up to the implementation to include an optional cryptography engine, albeit with contractual rights. 
+It gives support to ARMv8 advanced SIMD (Simple Input, multiple data) and floating-point operations. Optionally, it is up to the implementation to include an optional cryptography engine, albeit with contractual rights. \cite{cortexA72manual}
 
 \subsubsection*{GIC CPU interface}
-This unit delivers interrupts to the processor. Examples of interruptions: device signals (device ready, read/write completed, error; battery and power), clock IRQ (for scheduling), exceptions.
+This unit delivers interrupts to the processor. Examples of interruptions: device signals (device ready, read/write completed, error; battery and power), clock IRQ (for scheduling), exceptions. \cite{cortexA72manual}
 
 \subsection*{Interrupts and debug}
 
 
 \subsubsection*{Generic Timer}
-Provides with the ability to trigger interrupts and trigger events.
+Provides with the ability to trigger interrupts and trigger events. \cite{cortexA72manual}
 
 \subsubsection*{Debug and trace}
 
@@ -68,7 +67,23 @@ Provides with the ability to trigger interrupts and trigger events.
 	\item {ARMv8 debug architecture with slave architecture with debug registers. It provides the programmer with registers for discerning the interrupts \textbf{source}, \textbf{behavior} to apply, and \textbf{routing} to other processors.}
 	\item {Performance Monitor Unit: creates statistic data from \textbf{runtime} status of the CPU and the memory}
 	\item {Embedded Trace Macrocells: performance of real-time instruction flow tracing.}
+	
+	\cite{cortexA72manual}
 \end{itemize}
 \section{Cache memory}
+\begin{tabular}{|c|c|c|c|}
+	\hline 
+	Cache level & Sizes available & Associativity & Cache line length \\ 
+	\hline 
+	Level 1 - Data & 32KB \textbf{per core} & 2-way set assoc. & 64 bits \\ 
+	\hline 
+	Level 1 - Instruction & 48KBs & 3-way set assoc. &  64 bits \\ 
+	\hline 
+	Level 2 & 12KB, 1MB, 2MB, or 4MB & 16-way associativity & 64 bits \\ 
+	\hline	
+\end{tabular} 
 
+
+Writes to main memory use as policy \textbf{ Write-back-write-allocate}. This means that updating MM only takes place when cache is \textit{dirty} and prompt to be discarded, and not on MM directly; and upon a miss in cache, the block is brought to the upper levels and allocated there for it to be read or written.
+\cite{cortexA72manual} 6.4.1
 \section{I/O support}
