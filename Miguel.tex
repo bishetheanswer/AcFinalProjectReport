@@ -1,0 +1,74 @@
+\section{Internal organization/structure (datapath)}
+The internal structure is the one pictured in Figure \ref*{cortexA72conf}. And the details of the blocks are described in section 2.1.1 of source \cite{cortexA72manual}.
+\subsection*{Fetch, decode and dispatch units}
+\subsubsection*{Instruction Fetch}
+Up to 3 instructions are fetched from the L1 instruction memory. The cache has 48KB of size in a 3-way associativity configuration with 64-bits-long cache lines; and optionally, parity bits for error-checking in the data and tag. 
+In order to facilitate address prediction and translation, the architecture provides this features: 
+\begin{itemize}
+	\item {For fast virtual address translation, a Translation Lookaside Buffer (TLB) is with support for pages of sizes 4KB, 64KB, and  1MB.} \label{tlb}
+	\item {2-level dynamic Branch Target Buffer (BTB). A static predictor is also provided.}
+\end{itemize}
+
+
+\subsubsection*{Instruction decode}
+Types of instructions able to be decoded by the CPU (including):
+
+\begin{itemize}
+	\item {A32: 32-bit wide, aligned on 4-byte boundaries. Both A-profile and R-profile are supported (application and real-time applications respectively) It is the most supported ISA. 
+		} \cite{a32instr}
+	\item {T32: mixed 32 and 16-bit length instruction set, aiming at lost memory footprint and cost. 
+		
+		It's the only ISA supported by type M instructions (specific to microcontrollers)} \cite{t32instr}
+	\item {A64. Instructions semantics similar to A32 and T32, with 31 64-bit general purpose registers; independent from Program Counter and Stack Pointer, and hard-coded zero register.} \cite{a64instr}
+	
+	This unit performs register renaming to facilitate out-of-order execution; thus removing both WAW and WAR hazards.
+\end{itemize}
+
+
+\subsubsection*{Instruction dispatch}
+The dispatch unit controls when the instructions that are decoded are ready to be issued, and afterwards, when the the results are retired.
+
+\subsection*{Functional units for execution and memory access}
+This set of functional units is composed by the units for operating with integers, floating point values, and memory accesses.
+
+\subsubsection*{Integer execute}
+\begin{itemize}
+	\item 2 ALU pipelines.
+	\item Integer multiply-accumulate and ALU pipelines.
+	\item Iterative integer dividing unit.
+	\item Unit for resolution and prediction of branches.
+	\item Result forwarding routes.
+\end{itemize}
+
+\subsubsection*{Load/Store unit}
+This unit is responsible of accessing L1 memory cache and service memory coherency requests with the second cache level (L2).
+
+L1 is a 32KB 2-way associative cache with 64-bits-long lines, and can optionally implement Error Correction Code (ECC)\footnote{The difference between using parity bits in memories and using ECC memory is that, while parity bits helps \textbf{detecting} errors; ECC memory can both \textbf{detect} and \textbf{repair} those errors} for every 32 bits. Apart from the aforementioned TLB (see \nameref{tlb} ), this unit also uses automatic pre-fetching targeting the L1 data cache and L2. \cite{cortexA72manual}
+
+\subsubsection*{Level-2 of cache}
+Services the both the data and instruction L1 in case of cache miss, and keeps coherence. For that, it keeps a duplicate of the tag fields of each L1 cache. 
+Its size is either 12KB, 1MB, 2MB, or 4MB; with a 16-way associativity with optional ECC data per 64 bits; and a 1024-entry TLB \textbf{for each processor}.
+This cache, as explained in the section 7.2 of \cite{cortexA72manual} has a \textit{dirty} bit per line of cache (That is, per 64 bits).
+
+\subsubsection*{Advanced SIMD and floating-point}
+It gives support to ARMv8 advanced SIMD (Simple Input, multiple data) and floating-point operations. Optionally, it is up to the implementation to include an optional cryptography engine, albeit with contractual rights. 
+
+\subsubsection*{GIC CPU interface}
+This unit delivers interrupts to the processor. Examples of interruptions: device signals (device ready, read/write completed, error; battery and power), clock IRQ (for scheduling), exceptions.
+
+\subsection*{Interrupts and debug}
+
+
+\subsubsection*{Generic Timer}
+Provides with the ability to trigger interrupts and trigger events.
+
+\subsubsection*{Debug and trace}
+
+\begin{itemize}
+	\item {ARMv8 debug architecture with slave architecture with debug registers. It provides the programmer with registers for discerning the interrupts \textbf{source}, \textbf{behavior} to apply, and \textbf{routing} to other processors.}
+	\item {Performance Monitor Unit: creates statistic data from \textbf{runtime} status of the CPU and the memory}
+	\item {Embedded Trace Macrocells: performance of real-time instruction flow tracing.}
+\end{itemize}
+\section{Cache memory}
+
+\section{I/O support}
