@@ -89,8 +89,9 @@ Provides with the ability to trigger interrupts and trigger events. \cite{cortex
 \label{cachetable}
 \end{table}
 
+In table \ref{cachetable} we have a unified version for all the information regarding cache that was defined previously.
 
-Writes to main memory use as policy \textbf{ Write-back-write-allocate}. This means that updating MM only takes place when cache is \textit{dirty} and prompt to be discarded, and not on MM directly; and upon a miss in cache, the block is brought to the upper levels and allocated there for it to be read or written.
+Regarding writing policy, write requests to main memory use as policy \textbf{ Write-back-write-allocate}. This means that updating MM only takes place when cache is \textit{dirty} and prompt to be discarded, and not on MM directly; and upon a miss in cache, the block is brought to the upper levels and allocated there for it to be read or written, and not directly on main memory.
 \cite{cortexA72manual} 6.4.1
 
 No access time or bandwidth was found for the cache memories, however, in some implementations, there's information regarding memory controller, therefore cache memory should be faster to access and transfer data from/to. In that specific implementation, the maximum bandwidth for secondary memory is $11.92 GiB/s$; and the most powerful technology to use in this CPU \textit{LPDDR3-1600}, 1600 indicating its frequency in MHz.\cite{mt6797}
