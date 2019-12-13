@@ -141,7 +141,49 @@ The key point to take-away is that ARM has focused heavily on improving power an
 
 %Architectural characteristics
 \section{Architectural characteristics}
+\hspace{\parindent}The Cortex-A72 processor implements the ARMv8-A architecture. This includes the A64 instruction set.\par
+A64 is a 32-bit fixed-length instruction set that machines in AArch64 state execute. This instruction set was introduced with the ARMv8 ISA.\par
+The A64 instruction set was introduced with the ARMv8 ISA in order to introduce 64-bit capabilities, primarily targeting the LP64 and LPP64 64-bit data models. It is fixed-length with instructions being 32 bits in size and follow almost identical semantics as in AArch32. This was done in order to maximize the hardware reuse. With the exception of branches and comparisons, predication was also eliminted. Compared to the 32-bit instruction set which offered 14 general-purpose registers, the A64 IS has 31 GPRs. Most instructions are capable of having a 32-bit or 64-bit operand and the address is assumed to be 64-bit in size.\cite{a64instr2}
 
+\subsection{Registers}
+\hspace{\parindent}A64 has 31 general-purpose registers, all of which are 64-bit wide. Depending on the instruction, the 32nd register is used to obtain a zero or the stack pointer. The almost doubling of the GPR count was done in order to improve both the performance and power of the implementations (designed to reduce cache accesses). Banking was eliminated altogether. Additionally, the stack pointer is no longer regarded as a GPR and the program counter is no longer treated as a normal directly accessible register.\par
+Compared to A32, smaller registers no longer packed into the larger ones but are instead mapped one-to-one to the low-order bits of the bigger register. Registers W0 through W30 are 32 bit and register X0 through X30 are 64 bits.\cite{a64instr2}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.6\linewidth]{imgs/arm-a64-registers.png}
+\caption{Arm A64 registers}
+\label{arma64registers}
+\end{center}
+\end{figure}
+
+\subsection{Instructions}
+\hspace{\parindent}Most instructions are capable of supporting both 32-bit or 64-bit operands. A64 primarily targeted the LP64 and LPP64 data models, meaning long, long long integers, and pointers are 64-bit wide while integers are 32 bit. A64 has a limited set of instructions supporting predication and arbitrary length load/store are no longer supported.\cite{a64instr2}\par
+The A64 instruction set overloads instruction mnemonics. That is, it distinguishes between the
+different forms of an instruction, based on the operand register names that are used. For example,
+the following ADD instructions all have different forms, but you only have to remember one
+instruction and the assembler automatically chooses the correct encoding, based on the operands
+used.\cite{a64wiki}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\linewidth]{imgs/instr1.png}
+\caption{Arm A64 ADD Instructions}
+\label{a64add}
+\end{center}
+\end{figure}
+
+\subsection{Advanced SIMD}
+\hspace{\parindent}A64 Advanced SIMD (NEON) shares the same register file as the A32 floating-point register file but is extended to 128-bit. A64 has 32 128-bit wide vector registers (this is double the amount from A32). A64 advanced SIMD added support for double-precision floating point as well as IEE 754 compliance. Additional instructions were also added to support the 2008 version of the standard (e.g., conversion, min/max).\cite{a64instr2}\par
+Media registers are referred to Vn. The 64-bit (Dn) and 32-bit (Sn) forms can also be accessed.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1\linewidth]{imgs/a64media.png}
+\caption{Arm A64 Media Register File}
+\label{a64media}
+\end{center}
+\end{figure}
 
 %Parte de Miguel
 \input{Miguel}
@@ -151,21 +193,22 @@ The key point to take-away is that ARM has focused heavily on improving power an
 \begin{thebibliography}{9}
 \bibitem{wikipediaintro} 
 Wikipedia.
-\textit{ARM architecture}. 
+\textit{ARM architecture} - Last access: 11/12/2019. Available at \url{https://en.wikipedia.org/wiki/ARM_architecture} 
 
- 
 \bibitem{cortexA72manual} 
-\textit{ARM® Cortex®-A72 MPCore Processor Technical Reference Manual}.
-
+\textit{ARM® Cortex®-A72 MPCore Processor Technical Reference Manual} - Last access: 13/12/2019. Available at \url{https://static.docs.arm.com/100095/0003/cortex_a72_mpcore_trm_100095_0003_05_en.pdf}
  
 \bibitem{androidauthority} 
-Robert Triggs. \textit{A closer look at the ARM Cortex-A72}.
+Robert Triggs. \textit{A closer look at the ARM Cortex-A72} - Last access: 13/12/2019. Available at \url{https://www.androidauthority.com/closer-look-arm-cortex-a72-603699/}
 
+\bibitem{a64instr2}
+\textit{The A64 instruction set} - Last access: 13/12/2019. Available at \url{https://static.docs.arm.com/100898/0100/the_a64_Instruction_set_100898_0100.pdf}
+
+\bibitem{a64wiki}
+\textit{A64 - ARM} - Last access: 13/12/2019. Available at \url{https://en.wikichip.org/wiki/arm/a64}
 
 \bibitem{a32instr}
 \textit{Arm Developer - A32 instruction set} - last access: 12/12/2019. Available at \url{https://developer.arm.com/architectures/instruction-sets/base-isas/a32}
-
-
 
 \bibitem{a64instr}
 \textit{Arm Developer - A64 instruction set} - last access: 12/12/2019. Available at \url{https://developer.arm.com/architectures/instruction-sets/base-isas/a64}
@@ -178,8 +221,5 @@ Robert Triggs. \textit{A closer look at the ARM Cortex-A72}.
 \textit{Arm Developer - T32 instruction set} - last access: 13/12/2019. Available at \url{https://en.wikichip.org/wiki/mediatek/helio/mt6797}
 
 \end{thebibliography}
-
-
-
 
 \end{document}
