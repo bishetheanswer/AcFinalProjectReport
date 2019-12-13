@@ -47,7 +47,7 @@ L1 is a 32KB 2-way associative cache with 64-bits-long lines, and can optionally
 \subsubsection*{Level-2 of cache}
 Services the both the data and instruction L1 in case of cache miss, and keeps coherence. For that, it keeps a duplicate of the tag fields of each L1 cache. 
 Its size is either 12KB, 1MB, 2MB, or 4MB; with a 16-way associativity with optional ECC data per 64 bits; and a 1024-entry TLB \textbf{for each processor}.
-This cache, as explained in the section 7.2 of \cite{cortexA72manual} has a \textit{dirty} bit per line of cache (That is, per 64 bits).
+This cache, as explained in the section 7.2 of \cite{cortexA72manual} has a \textit{dirty} bit per line of cache (That is, per 64 bits). For a vision of the whole cache parameters, see table \ref{cachetable}
 
 \subsubsection*{Advanced SIMD and floating-point}
 It gives support to ARMv8 advanced SIMD (Simple Input, multiple data) and floating-point operations. Optionally, it is up to the implementation to include an optional cryptography engine, albeit with contractual rights. \cite{cortexA72manual}
@@ -71,7 +71,10 @@ Provides with the ability to trigger interrupts and trigger events. \cite{cortex
 	\cite{cortexA72manual}
 \end{itemize}
 \section{Cache memory}
+
+\begin{table}[H]
 \begin{tabular}{|c|c|c|c|}
+	
 	\hline 
 	Cache level & Sizes available & Associativity & Cache line length \\ 
 	\hline 
@@ -82,6 +85,9 @@ Provides with the ability to trigger interrupts and trigger events. \cite{cortex
 	Level 2 & 12KB, 1MB, 2MB, or 4MB & 16-way associativity & 64 bits \\ 
 	\hline	
 \end{tabular} 
+\caption{Cache parameters for Cortex-A72}
+\label{cachetable}
+\end{table}
 
 
 Writes to main memory use as policy \textbf{ Write-back-write-allocate}. This means that updating MM only takes place when cache is \textit{dirty} and prompt to be discarded, and not on MM directly; and upon a miss in cache, the block is brought to the upper levels and allocated there for it to be read or written.
