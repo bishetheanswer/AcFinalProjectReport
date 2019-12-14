@@ -52,7 +52,8 @@ This cache, as explained in the section 7.2 of \cite{cortexA72manual} has a \tex
 \subsubsection*{Advanced SIMD and floating-point}
 It gives support to ARMv8 advanced SIMD (Simple Input, multiple data) and floating-point operations. Optionally, it is up to the implementation to include an optional cryptography engine, albeit with contractual rights. \cite{cortexA72manual}
 
-\subsubsection*{GIC CPU interface}
+\subsubsection*{GIC CPU interface} 
+\label{gic}
 This unit delivers interrupts to the processor. Examples of interruptions: device signals (device ready, read/write completed, error; battery and power), clock IRQ (for scheduling), exceptions. \cite{cortexA72manual}
 
 \subsection*{Interrupts and debug}
@@ -62,6 +63,7 @@ This unit delivers interrupts to the processor. Examples of interruptions: devic
 Provides with the ability to trigger interrupts and trigger events. \cite{cortexA72manual}
 
 \subsubsection*{Debug and trace}
+\label{debug}
 
 \begin{itemize}
 	\item {ARMv8 debug architecture with slave architecture with debug registers. It provides the programmer with registers for discerning the interrupts \textbf{source}, \textbf{behavior} to apply, and \textbf{routing} to other processors.}
@@ -97,3 +99,27 @@ Regarding writing policy, write requests to main memory use as policy \textbf{ W
 No access time or bandwidth was found for the cache memories, however, in some implementations, there's information regarding memory controller, therefore cache memory should be faster to access and transfer data from/to. In that specific implementation, the maximum bandwidth for secondary memory is $11.92 GiB/s$; and the most powerful technology to use in this CPU \textit{LPDDR3-1600}, 1600 indicating its frequency in MHz.\cite{mt6797}
 
 \section{I/O support}
+The I/O of this architecture is provided by  interfaces with other units or components, being mainly these:
+
+\begin{itemize}
+	\item { Memory interface: provides the following advantages: 
+		\begin{itemize}
+			\item Hardware cache coherency (faster than software).
+			\item Transaction ordering for memory.
+			\item Management of virtual memory management.
+		\end{itemize}
+ }
+	\item { (Optional) Generic Interrupt Controller, already described in section \ref{gic}.}
+	\item { Debug interface, also defined in \ref{debug}; the same as the trace interface. }
+	\item { Performance Monitor Unit: provides useful information about the processor when debugging or profiling code. By using six counter can be used to keep track of available events. Those events can be codified and stored in registers of the architecture itself or the APB architecture. \cite{cortexA72manual} 11.2.1
+	
+	The block diagram is as follows in figure \ref{eventsblock}: 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{imgs/eventsblock}
+		\caption[]{PMU block diagram}
+		\label{eventsblock}
+	\end{figure}
+}
+\end{itemize}
