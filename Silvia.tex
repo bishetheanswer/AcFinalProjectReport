@@ -32,17 +32,19 @@ Performing register renaming is key in order to facilitate out-of-order executio
 \hspace{\parindent}Finally, once all the micro-ops of a given instruction have finished executing, its result is written to a 128-entry re-order buffer, and then sent back to the dispatch unit to update the register files and commit the instructions in order.
 \pagebreak{}
 \section{Performance studies}
-%TODO ask miguel játiva re: content overlap
-\hspace{\parindent}The performance of the Cortex-A72 can be studied using a Raspberry Pi 4, as its system on chip, the Broadcom BCM2711B0, implements it as its only CPU, making it easier to isolate the results. Taking this into account, here are some benchmark results for the aforementioned system:
+\hspace{\parindent}The main contributors to the increased performance of the Cortex-A72 compared to the previous A57, from an architectural standpoint, are the new branch predictor, the increased decode/dispatch operation bandwidth, and modified execution units. \par
+These changes contribute to more efficient use of the predictor units, as well as up to 20\% more accurate predictions, a more continuous influx of micro-operations to the execution units, lower latencies for floating-point and SIMD operations, and up to 30\% faster fetching of data from cache thanks to the combined L1/L2 prefetcher, among other improvements which could be seen in figures \ref{cortexA72performance}, \ref{cortexA72power}, and \ref{cortexA72usable} earlier. \cite{androidauthority} \par
+The performance of the Cortex-A72 can be studied further using a Raspberry Pi 4, as its system on chip, the Broadcom BCM2711, implements it as its only CPU. This makes it easier to isolate the results compared to other SoCs which include a second, less powerful CPU, following ARM's big.LITTLE design, often used in smartphones for the increased power efficiency that it can provide in that use case. Taking this into account, here are some benchmark results for the aforementioned system:
 \subsection*{Linpack}
-\hspace{\parindent}As a test of floating point performance, the results in figure \ref{linpack} of the Linpack benchmark show the increase in performance, of nearly four times the amount of instructions per second, of the A72 compared to the Cortex-A53, used in the Raspberry Pi 3, despite only running 100 MHz faster: \cite{linpack}
+\hspace{\parindent}A classic benchmark program for testing floating point performance, the results in figure \ref{linpack} of the Linpack benchmark show the increase in performance, of nearly four times the amount of instructions per second, of the A72 compared to the Cortex-A53, used in the Raspberry Pi 3, despite only running 100 MHz faster: \cite{linpack}
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.7\linewidth]{imgs/linpack.png}
-		\caption{Linpack benchmark results for the different models of Raspberry Pi}
+		\caption{Linpack benchmark results for different models of Raspberry Pi}
 		\label{linpack}
 	\end{center}
 \end{figure}
+The previous figure also shows the progression in performance from the ARMv6-based ARM11 CPU of the first Raspberry Pi, through the ARMv7-based Cortex-A7 of the Pi 2.
 \subsection*{SysBench}
 \hspace{\parindent}This benchmark software is based around multi-threaded prime number computation. In this case, as shown in figure \ref{sysbench}, the A72 is faster than the A53 of the Raspberry Pi 3, but the margin is not as large as with Linpack, this time showing a performance improvement of about 36\% when testing for prime numbers below 20000: \cite{sysbench}
 \begin{figure}[H]
@@ -52,3 +54,4 @@ Performing register renaming is key in order to facilitate out-of-order executio
 		\label{sysbench}
 	\end{center}
 \end{figure}
+The ASUS TinkerBoard also shown in the graph, for reference, uses the ARMv7-based Cortex-A17 processor included in the Rockchip RK3288 SoC, running at 1.8 GHz, 400 MHz faster than the Pi 4's A72. The A17 was the last ARM-designed CPU using the ARMv7 architecture, and as seen here, can be superseded at lower clock speeds by the newer processors.
