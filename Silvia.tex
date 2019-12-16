@@ -22,8 +22,7 @@
 \subsection*{Fetch}
 \hspace{\parindent}Instruction execution begins as up to three instructions are fetched from the L1 instruction cache. For branch instructions, prediction also takes place during this stage, making use of the BTB and static predictor this architecture provides.
 \subsection*{Decode}
-\hspace{\parindent}In this next stage, the previous instructions are decoded into micro-operations to be fed into the execution units, register renaming is performed, removing any potential WAW or WAR hazards, and up to five of the decoded micro-ops are dispatched to the issue queues; this stage could therefore be interpreted as three separate ones (decode, rename and dispatch), with the first taking four cycles, and the latter two taking two cycles each.
-
+\hspace{\parindent}In this next stage, the previous instructions are decoded into micro-operations to be fed into the execution units, register renaming is performed, removing any potential WAW or WAR hazards, and up to five of the decoded micro-ops are dispatched to the issue queues; this stage could therefore be interpreted as three separate ones (decode, rename and dispatch), with the first taking four cycles, and the latter two taking two cycles each.\par
 Performing register renaming is key in order to facilitate out-of-order execution in the following stages. It should also be noted that, prior to the renaming, the instructions operate on a virtual register pool, which helps to prevent the number of registers specified at the architectural level from becoming a bottleneck. \cite{renaming}
 \subsection*{Issue}
 \hspace{\parindent}Once they have entered the issue queue, the micro-operations are scheduled onto their respective execution units, up to eight at a time, corresponding to the eight execution units of this processor. From this point on, instruction execution is performed out-of-order.
@@ -34,4 +33,22 @@ Performing register renaming is key in order to facilitate out-of-order executio
 \pagebreak{}
 \section{Performance studies}
 %TODO ask miguel játiva re: content overlap
-
+\hspace{\parindent}The performance of the Cortex-A72 can be studied using a Raspberry Pi 4, as its system on chip, the Broadcom BCM2711B0, implements it as its only CPU, making it easier to isolate the results. Taking this into account, here are some benchmark results for the aforementioned system:
+\subsection*{Linpack}
+\hspace{\parindent}As a test of floating point performance, the results in figure \ref{linpack} of the Linpack benchmark show the increase in performance, of nearly four times the amount of instructions per second, of the A72 compared to the Cortex-A53, used in the Raspberry Pi 3, despite only running 100 MHz faster: \cite{linpack}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{imgs/linpack.png}
+		\caption{Linpack benchmark results for the different models of Raspberry Pi}
+		\label{linpack}
+	\end{center}
+\end{figure}
+\subsection*{SysBench}
+\hspace{\parindent}This benchmark software is based around multi-threaded prime number computation. In this case, as shown in figure \ref{sysbench}, the A72 is faster than the A53 of the Raspberry Pi 3, but the margin is not as large as with Linpack, this time showing a performance improvement of about 36\% when testing for prime numbers below 20000: \cite{sysbench}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.7\linewidth]{imgs/sysbench.png}
+		\caption{Sysbench results for the Pi 4, Pi 3 and ASUS TinkerBoard}
+		\label{sysbench}
+	\end{center}
+\end{figure}
